@@ -972,43 +972,4 @@ audio.addEventListener("loadedmetadata", () => {
 </script>
 
 </body>
-</html>ill();
-
-        flake.y += flake.speed;
-        flake.x += flake.drift;
-
-        if (flake.y > window.innerHeight + 5) {
-            flake.y = -5;
-            flake.x = Math.random() * window.innerWidth;
-        }
-
-        if (flake.x > window.innerWidth + 5) {
-            flake.x = -5;
-        }
-
-        if (flake.x < -5) {
-            flake.x = window.innerWidth + 5;
-        }
-    }
-
-    requestAnimationFrame(drawSnow);
-}
-
-window.addEventListener("resize", resizeCanvas);
-
-resizeCanvas();
-drawSnow();
-
-/* Reset tampilan saat lagu selesai */
-audio.addEventListener("ended", () => {
-    lyricElements.forEach(element => element.classList.remove("show"));
-
-    poster.classList.remove("show");
-    poster.classList.add("hide");
-
-    pauseButton.textContent = "▶";
-});
-</script>
-
-</body>
-</html>
+        </html>
