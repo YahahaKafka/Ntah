@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Magnolia</title>
+<title>Magnolia ♡</title>
 
 <style>
 * {
@@ -12,7 +12,7 @@
 
 body {
     margin: 0;
-    background: #fff;
+    background: white;
     font-family: Arial, sans-serif;
     overflow: hidden;
 }
@@ -21,29 +21,46 @@ body {
 #intro {
     position: fixed;
     inset: 0;
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
     z-index: 100;
-    transition: opacity 0.8s ease;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .7s ease, visibility .7s;
 }
 
+#intro.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* TOMBOL PLAY IMUT */
 #playIntro {
-    width: 0;
-    height: 0;
-    padding: 0;
-    border-top: 35px solid transparent;
-    border-bottom: 35px solid transparent;
-    border-left: 52px solid #111;
-    background: none;
-    border-right: none;
+    width: 112px;
+    height: 112px;
+    border: 2px solid #222;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    box-shadow: 0 5px 0 #222;
+    transition: transform .2s, box-shadow .2s;
+    -webkit-tap-highlight-color: transparent;
 }
 
-#playIntro:hover {
-    transform: scale(1.12);
+#playIntro:active {
+    transform: translateY(4px) scale(.96);
+    box-shadow: 0 1px 0 #222;
+}
+
+#playIntro svg {
+    width: 76px;
+    height: 76px;
 }
 
 /* SCENE */
@@ -51,11 +68,10 @@ body {
     position: fixed;
     inset: 0;
     background: #050505;
-    color: white;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 1s ease;
     overflow: hidden;
+    transition: opacity .8s ease, visibility .8s;
 }
 
 #scene.active {
@@ -76,8 +92,8 @@ body {
 /* POSTER */
 #poster {
     position: absolute;
-    width: min(58vw, 330px);
-    max-height: 65vh;
+    width: min(70vw, 330px);
+    max-height: 62vh;
     object-fit: contain;
     left: 50%;
     top: 50%;
@@ -88,17 +104,17 @@ body {
 }
 
 #poster.show {
-    animation: posterIn 0.5s ease forwards;
+    animation: posterIn .5s ease forwards;
 }
 
 #poster.hide {
-    animation: posterOut 0.5s ease forwards;
+    animation: posterOut .5s ease forwards;
 }
 
 @keyframes posterIn {
     from {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(0.94);
+        transform: translate(-50%, -50%) scale(.94);
     }
     to {
         opacity: 1;
@@ -129,14 +145,12 @@ body {
     position: absolute;
     max-width: 90%;
     transform: translate(-50%, -50%);
-    font-size: clamp(17px, 3.5vw, 27px);
     text-align: center;
-    font-weight: 600;
-    letter-spacing: 0.3px;
     color: white;
-    opacity: 0;
-    animation: lyricIn 0.8s ease forwards;
+    font-size: clamp(17px, 4vw, 27px);
+    font-weight: 600;
     text-shadow: 0 2px 12px #000;
+    animation: lyricIn .7s ease both;
 }
 
 .lyric.red {
@@ -156,7 +170,7 @@ body {
     }
 }
 
-/* GOOFY OBJECTS */
+/* EMOJI DAN DOODLE */
 #goofyLayer {
     position: absolute;
     inset: 0;
@@ -168,8 +182,8 @@ body {
 .goofy {
     position: absolute;
     left: -100px;
-    white-space: nowrap;
     opacity: 0;
+    white-space: nowrap;
     will-change: transform, opacity;
     filter: drop-shadow(0 2px 5px #000);
 }
@@ -180,21 +194,20 @@ body {
 }
 
 .goofy.doodle {
-    width: 65px;
-    height: 65px;
+    width: 60px;
+    height: 60px;
     animation: doodleFly 6s ease-in-out forwards;
 }
 
 .goofy svg {
     width: 100%;
     height: 100%;
-    overflow: visible;
 }
 
 @keyframes goofyFly {
     0% {
         transform: translateX(-10vw) translateY(0)
-                   rotate(-15deg) scale(0.7);
+                   rotate(-15deg) scale(.7);
         opacity: 0;
     }
     12% {
@@ -206,12 +219,12 @@ body {
     }
     70% {
         transform: translateX(75vw) translateY(25px)
-                   rotate(-10deg) scale(0.9);
+                   rotate(-10deg) scale(.9);
         opacity: 1;
     }
     100% {
         transform: translateX(120vw) translateY(-15px)
-                   rotate(20deg) scale(0.7);
+                   rotate(20deg) scale(.7);
         opacity: 0;
     }
 }
@@ -223,14 +236,14 @@ body {
         opacity: 0;
     }
     15% {
-        opacity: 0.95;
+        opacity: .95;
     }
     50% {
         transform: translateX(50vw) translateY(-45px)
                    rotate(25deg);
     }
     85% {
-        opacity: 0.95;
+        opacity: .95;
     }
     100% {
         transform: translateX(120vw) translateY(15px)
@@ -238,136 +251,69 @@ body {
         opacity: 0;
     }
 }
-
-/* KONTROL AUDIO */
-#controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 18px 20px 24px;
-    z-index: 10;
-    background: linear-gradient(transparent, rgba(0,0,0,0.8));
-}
-
-#timeRow {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 8px;
-    color: #ddd;
-    font-size: 12px;
-}
-
-#progress {
-    width: 100%;
-    height: 4px;
-    border-radius: 10px;
-    appearance: none;
-    background: #555;
-    cursor: pointer;
-    display: block;
-}
-
-#progress::-webkit-slider-thumb {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    background: white;
-    border-radius: 50%;
-}
-
-#progress::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    background: white;
-    border: none;
-    border-radius: 50%;
-}
-
-#controlButtons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-top: 12px;
-}
-
-#playPause {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-    padding: 0;
-}
-
-#songName {
-    color: #ddd;
-    font-size: 13px;
-}
-
-/* LAYAR KECIL */
-@media (max-width: 600px) {
-    #poster {
-        width: min(72vw, 300px);
-    }
-
-    #controls {
-        padding: 15px 15px 20px;
-    }
-
-    .goofy.emoji {
-        font-size: 29px;
-    }
-}
 </style>
 </head>
 
 <body>
 
-<!-- HALAMAN INTRO -->
+<!-- TOMBOL PLAY KUCING -->
 <div id="intro">
-    <button id="playIntro" aria-label="Putar Magnolia"></button>
+    <button id="playIntro" aria-label="Putar lagu Magnolia">
+        <svg viewBox="0 0 100 100"
+             xmlns="http://www.w3.org/2000/svg">
+            <!-- Telinga -->
+            <path d="M25 35 L23 15 L42 27
+                     M58 27 L77 15 L75 35"
+                  fill="white" stroke="#222"
+                  stroke-width="3.5"
+                  stroke-linejoin="round"/>
+
+            <!-- Wajah -->
+            <circle cx="50" cy="48" r="30"
+                    fill="white" stroke="#222"
+                    stroke-width="3.5"/>
+
+            <!-- Mata -->
+            <circle cx="39" cy="45" r="3.2" fill="#222"/>
+            <circle cx="61" cy="45" r="3.2" fill="#222"/>
+
+            <!-- Hidung -->
+            <path d="M46 52 Q50 56 54 52"
+                  fill="none" stroke="#222"
+                  stroke-width="2.5"
+                  stroke-linecap="round"/>
+
+            <!-- Kumis -->
+            <path d="M35 53 L21 50 M35 58 L23 61
+                     M65 53 L79 50 M65 58 L77 61"
+                  fill="none" stroke="#222"
+                  stroke-width="2"
+                  stroke-linecap="round"/>
+
+            <!-- Play kecil -->
+            <path d="M44 68 L44 84 L60 76 Z"
+                  fill="#ff8ca8" stroke="#222"
+                  stroke-width="2"
+                  stroke-linejoin="round"/>
+
+            <!-- Pipi -->
+            <circle cx="32" cy="53" r="4"
+                    fill="#ffb6c8" opacity=".9"/>
+            <circle cx="68" cy="53" r="4"
+                    fill="#ffb6c8" opacity=".9"/>
+        </svg>
+    </button>
 </div>
 
-<!-- AUDIO -->
 <audio id="audio" preload="auto">
     <source src="magnolia.mp3" type="audio/mpeg">
 </audio>
 
-<!-- SCENE UTAMA -->
 <div id="scene">
-
     <canvas id="snow"></canvas>
-
     <img id="poster" src="poster.jpg" alt="Magnolia poster">
-
     <div id="goofyLayer"></div>
-
     <div id="lyrics"></div>
-
-    <div id="controls">
-        <div id="timeRow">
-            <span id="currentTime">0:00</span>
-            <span id="duration">0:39</span>
-        </div>
-
-        <input
-            id="progress"
-            type="range"
-            min="0"
-            max="100"
-            value="0"
-            step="0.1"
-            aria-label="Progress lagu"
-        >
-
-        <div id="controlButtons">
-            <button id="playPause" aria-label="Pause">Ⅱ</button>
-            <span id="songName">Magnolia — Magnolia Celebration</span>
-        </div>
-    </div>
-
 </div>
 
 <script>
@@ -378,56 +324,35 @@ const audio = document.getElementById("audio");
 const poster = document.getElementById("poster");
 const lyricsContainer = document.getElementById("lyrics");
 const goofyLayer = document.getElementById("goofyLayer");
-const progress = document.getElementById("progress");
-const currentTimeText = document.getElementById("currentTime");
-const durationText = document.getElementById("duration");
-const playPause = document.getElementById("playPause");
 
-/* LIRIK DAN TIMING */
+/* LIRIK */
 const lyrics = [
-    {
-        time: 10.02,
-        text: "Wrecking balls and millions stones",
-        x: 50, y: 27, red: false
-    },
-    {
-        time: 12.80,
-        text: "Will never took away",
-        x: 50, y: 69, red: true
-    },
-    {
-        time: 16.96,
-        text: "My strongest will to say",
-        x: 27, y: 43, red: true
-    },
-    {
-        time: 20.86,
-        text: "The words you long to hear",
-        x: 70, y: 31, red: false
-    },
-    {
-        time: 24.62,
-        text: "The city's falling down and down",
-        x: 50, y: 60, red: true
-    },
-    {
-        time: 28.25,
-        text: "This very old long way",
-        x: 30, y: 32, red: false
-    },
-    {
-        time: 31.55,
-        text: "I don't need to say more",
-        x: 68, y: 66, red: true
-    },
-    {
-        time: 35.14,
-        text: "The words you long to hear",
-        x: 50, y: 42, red: false
-    }
+    { time: 10.02, text: "Wrecking balls and millions stones",
+      x: 50, y: 27, red: false },
+
+    { time: 12.80, text: "Will never took away",
+      x: 50, y: 69, red: true },
+
+    { time: 16.96, text: "My strongest will to say",
+      x: 27, y: 43, red: true },
+
+    { time: 20.86, text: "The words you long to hear",
+      x: 70, y: 31, red: false },
+
+    { time: 24.62, text: "The city's falling down and down",
+      x: 50, y: 60, red: true },
+
+    { time: 28.25, text: "This very old long way",
+      x: 30, y: 32, red: false },
+
+    { time: 31.55, text: "I don't need to say more",
+      x: 68, y: 66, red: true },
+
+    { time: 35.14, text: "The words you long to hear",
+      x: 50, y: 42, red: false }
 ];
 
-/* POSTER: MUNCUL DETIK 2, HILANG SETELAH DETIK 10 */
+/* POSTER: DETIK 2 SAMPAI 10 */
 let posterState = "hidden";
 
 function updatePoster(time) {
@@ -452,7 +377,7 @@ function updatePoster(time) {
     }
 }
 
-/* LIRIK */
+/* LIRIK MUNCUL BERGANTIAN */
 let lastLyricIndex = -1;
 
 function updateLyrics(time) {
@@ -482,21 +407,270 @@ function updateLyrics(time) {
     }
 }
 
-/* FORMAT WAKTU */
-function formatTime(seconds) {
-    if (!Number.isFinite(seconds)) return "0:00";
+/* AUDIO FADE-IN */
+let fadeInterval = null;
 
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
+function fadeAudioIn() {
+    clearInterval(fadeInterval);
 
-    return minutes + ":" +
-        String(remainingSeconds).padStart(2, "0");
+    audio.volume = 0;
+    let step = 0;
+    const totalSteps = 30;
+
+    fadeInterval = setInterval(() => {
+        if (audio.paused) {
+            clearInterval(fadeInterval);
+            fadeInterval = null;
+            return;
+        }
+
+        step++;
+        audio.volume = Math.min(1, step / totalSteps);
+
+        if (step >= totalSteps) {
+            clearInterval(fadeInterval);
+            fadeInterval = null;
+        }
+    }, 50);
 }
 
-/* UPDATE PROGRESS DAN EFEK */
+/* TOMBOL PLAY */
+let starting = false;
+
+playIntro.addEventListener("click", async () => {
+    if (starting) return;
+
+    starting = true;
+    audio.currentTime = 0;
+    audio.volume = 0;
+
+    scene.classList.add("active");
+    intro.classList.add("hide");
+
+    try {
+        await audio.play();
+        fadeAudioIn();
+        startGoofy();
+    } catch (error) {
+        scene.classList.remove("active");
+        intro.classList.remove("hide");
+        starting = false;
+
+        alert(
+            "Audio gagal diputar. Pastikan magnolia.mp3 sudah di-upload."
+        );
+    }
+});
+
+/* WAKTU AUDIO */
 audio.addEventListener("timeupdate", () => {
-    const time = audio.currentTime;
-    const duration = audio.duration || 39;
+    updatePoster(audio.currentTime);
+    updateLyrics(audio.currentTime);
+});
+
+/* DOODLE PUTIH */
+const planeDoodle = `
+<svg viewBox="0 0 100 100" fill="none"
+     stroke="white" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 49 L85 17 L63 57 L43 67
+             L34 87 L30 60 Z"/>
+    <path d="M30 60 L85 17 L43 67"/>
+    <path d="M12 49 L43 67"/>
+    <path d="M8 30 L20 34 M8 72 L18 68"
+          stroke-dasharray="3 5"/>
+</svg>`;
+
+const ghostDoodle = `
+<svg viewBox="0 0 100 100" fill="none"
+     stroke="white" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 80 L22 43 C22 6 78 6 78 43
+             L78 80 L65 72 L54 81 L43 72 L31 81 Z"/>
+    <circle cx="40" cy="43" r="3" fill="white"/>
+    <circle cx="60" cy="43" r="3" fill="white"/>
+    <path d="M42 57 Q50 64 58 57"/>
+</svg>`;
+
+const starDoodle = `
+<svg viewBox="0 0 100 100" fill="none"
+     stroke="white" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 8 L60 37 L91 40 L67 59
+             L75 90 L50 72 L25 90 L33 59
+             L9 40 L40 37 Z"/>
+    <path d="M80 12 L83 21 L92 24 L83 27
+             L80 36 L77 27 L68 24 L77 21 Z"/>
+</svg>`;
+
+/* DAFTAR BENDA GOOFY */
+const goofyObjects = [
+    { type: "emoji", content: "✈️" },
+    { type: "emoji", content: "🦆🛹" },
+    { type: "emoji", content: "💀" },
+    { type: "emoji", content: "🛸" },
+    { type: "emoji", content: "🐈" },
+    { type: "emoji", content: "🗿" },
+    { type: "doodle", content: planeDoodle },
+    { type: "doodle", content: ghostDoodle },
+    { type: "doodle", content: starDoodle }
+];
+
+let goofyTimer = null;
+
+function spawnGoofy() {
+    if (audio.paused || audio.ended) return;
+
+    const item = goofyObjects[
+        Math.floor(Math.random() * goofyObjects.length)
+    ];
+
+    const object = document.createElement("div");
+    object.className = "goofy " + item.type;
+    object.innerHTML = item.content;
+    object.style.top = (12 + Math.random() * 68) + "%";
+
+    if (item.type === "emoji") {
+        object.style.fontSize =
+            (25 + Math.random() * 25) + "px";
+    } else {
+        const size = 40 + Math.random() * 40;
+        object.style.width = size + "px";
+        object.style.height = size + "px";
+    }
+
+    goofyLayer.appendChild(object);
+
+    setTimeout(() => object.remove(), 
+        item.type === "emoji" ? 5000 : 6000);
+}
+
+function scheduleGoofy() {
+    if (audio.paused || audio.ended) {
+        goofyTimer = null;
+        return;
+    }
+
+    goofyTimer = setTimeout(() => {
+        spawnGoofy();
+        scheduleGoofy();
+    }, 1800 + Math.random() * 3200);
+}
+
+function startGoofy() {
+    if (goofyTimer !== null) return;
+
+    spawnGoofy();
+    scheduleGoofy();
+}
+
+function stopGoofy() {
+    if (goofyTimer !== null) {
+        clearTimeout(goofyTimer);
+        goofyTimer = null;
+    }
+}
+
+audio.addEventListener("play", startGoofy);
+audio.addEventListener("pause", stopGoofy);
+
+/* SALJU */
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+let snowflakes = [];
+
+function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+
+    canvas.width = window.innerWidth * ratio;
+    canvas.height = window.innerHeight * ratio;
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    snowflakes = [];
+
+    const amount = Math.min(
+        120,
+        Math.floor(window.innerWidth / 5)
+    );
+
+    for (let i = 0; i < amount; i++) {
+        snowflakes.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            radius: .7 + Math.random() * 2,
+            speed: .4 + Math.random() * 1.3,
+            drift: -.35 + Math.random() * .7,
+            opacity: .25 + Math.random() * .65
+        });
+    }
+}
+
+function drawSnow() {
+    ctx.clearRect(
+        0, 0, window.innerWidth, window.innerHeight
+    );
+
+    for (const flake of snowflakes) {
+        ctx.beginPath();
+        ctx.arc(
+            flake.x, flake.y, flake.radius,
+            0, Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            "rgba(255,255,255," + flake.opacity + ")";
+        ctx.fill();
+
+        flake.y += flake.speed;
+        flake.x += flake.drift;
+
+        if (flake.y > window.innerHeight + 5) {
+            flake.y = -5;
+            flake.x = Math.random() * window.innerWidth;
+        }
+
+        if (flake.x < -5) {
+            flake.x = window.innerWidth + 5;
+        }
+
+        if (flake.x > window.innerWidth + 5) {
+            flake.x = -5;
+        }
+    }
+
+    requestAnimationFrame(drawSnow);
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+drawSnow();
+
+/* SAAT LAGU HABIS: KEMBALI KE TOMBOL PLAY */
+audio.addEventListener("ended", () => {
+    clearInterval(fadeInterval);
+    fadeInterval = null;
+
+    stopGoofy();
+    goofyLayer.innerHTML = "";
+    lyricsContainer.innerHTML = "";
+
+    poster.classList.remove("show", "hide");
+    poster.style.opacity = "0";
+    posterState = "hidden";
+
+    lastLyricIndex = -1;
+    starting = false;
+
+    scene.classList.remove("active");
+    intro.classList.remove("hide");
+});
+</script>
+
+</body>
+</html>tion = audio.duration || 39;
 
     currentTimeText.textContent = formatTime(time);
     durationText.textContent = formatTime(duration);
