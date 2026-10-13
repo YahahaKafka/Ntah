@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magnolia - Lyrics</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      transition: background 2s ease;
+    }
+
+    body.playing {
+      background: #000;
+    }
+
+    /* Intro dengan tombol play */
+    #intro {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      z-index: 10;
+      transition: opacity 1.5s ease;
+    }
+
+    #intro.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #playButton {
+      width: 75px;
+      height: 75px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #playButton::before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-top: 25px solid transparent;
+      border-bottom: 25px solid transparent;
+      border-left: 38px solid #000;
+      margin-left: 8px;
+    }
+
+    /* Area lirik */
+    #lyricsArea {
+      position: fixed;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2s ease;
+    }
+
+    #lyricsArea.visible {
+      opacity: 1;
+    }
+
+    .lyric {
+      position: absolute;
+      max-width: 85%;
+      color: #fff;
+      font-size: clamp(22px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.3;
+      overflow-wrap: break-word;
+      text-shadow: 0 2px 12px rgba(255, 255, 255, 0.12);
+      animation: appear 1.2s ease forwards;
+    }
+
+    .lyric.red {
+      color: #ff2525;
+      text-shadow:
+        0 0 8px rgba(255, 0, 0, 0.7),
+        0 0 20px rgba(255, 0, 0, 0.3);
+    }
+
+    .lyric.fadeOut {
+      animation: disappear 0.5s ease forwards;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        filter: blur(5px);
+        transform: scale(0.96);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+      }
+    }
+
+    @keyframes disappear {
+      from {
+        opacity: 1;
+        filter: blur(0);
+      }
+      to {
+        opacity: 0;
+        filter: blur(5px);
+      }
+    }
+
+    /* Kontrol audio */
+    #controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 18px 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #controls.visible {
+      opacity: 1;
+    }
+
+    #pauseButton {
+      color: #fff;
+      background: transparent;
+      border: none;
+      font-size: 23px;
+      cursor: pointer;
+    }
+
+    #progress {
+      width: min(65vw, 500px);
+      accent-color: #fff;
+      cursor: pointer;
+    }
+
+    #time {
+      color: #ccc;
+      font-size: 12px;
+      min-width: 75px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="intro">
+    <button id="playButton" aria-label="Putar lagu"></button>
+  </div>
+
+  <div id="lyricsArea"></div>
+
+  <div id="controls">
+    <button id="pauseButton" aria-label="Jeda lagu">Ⅱ</button>
+    <input id="progress" type="range" min="0" max="47" step="0.01" value="0">
+    <span id="time">0:00 / 0:47</span>
+  </div>
+
+  <audio id="audio" preload="auto">
+    <source src="magnolia.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const audio = document.getElementById("audio");
+    const intro = document.getElementById("intro");
+    const playButton = document.getElementById("playButton");
+    const lyricsArea = document.getElementById("lyricsArea");
+    const controls = document.getElementById("controls");
+    const pauseButton = document.getElementById("pauseButton");
+    const progress = document.getElementById("progress");
+    const timeDisplay = document.getElementById("time");
+
+    /*
+      Audio dipotong dari 01:53 sampai 02:40.
+      Timestamp lirik di bawah dihitung dari awal potongan.
+    */
+    const lyrics = [
+      [18.22, "Wrecking balls and millions stones", "left", false],
+      [25.16, "My strongest will to say", "right", true],
+      [29.06, "The words you long to hear", "top", false],
+      [32.82, "The city's falling down and down", "bottom", true],
+      [36.45, "This very old long way", "right", false],
+      [39.75, "I don't need to say more", "left", true],
+      [43.34, "The words you long to hear", "center", true]
+    ];
+
+    let currentLyricIndex = -1;
+    let currentLyricElement = null;
+    let fadeInterval = null;
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+
+      return `${mins}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function getPosition(position) {
+      switch (position) {
+        case "left":
+          return {
+            left: "7%",
+            top: `${15 + Math.random() * 60}%`
+          };
+
+        case "right":
+          return {
+            right: "7%",
+            top: `${15 + Math.random() * 60}%`,
+            textAlign: "right"
+          };
+
+        case "top":
+          return {
+            left: `${8 + Math.random() * 30}%`,
+            top: `${8 + Math.random() * 15}%`
+          };
+
+        case "bottom":
+          return {
+            right: `${7 + Math.random() * 15}%`,
+            bottom: `${15 + Math.random() * 15}%`,
+            textAlign: "right"
+          };
+
+        case "center":
+          return {
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            textAlign: "center"
+          };
+
+        default:
+          return {
+            left: `${5 + Math.random() * 45}%`,
+            top: `${10 + Math.random() * 70}%`
+          };
+      }
+    }
+
+    function showLyric(index) {
+      if (currentLyricElement) {
+        const oldElement = currentLyricElement;
+        oldElement.classList.add("fadeOut");
+
+        setTimeout(() => oldElement.remove(), 500);
+      }
+
+      currentLyricElement = null;
+
+      if (index < 0 || index >= lyrics.length) return;
+
+      const [, text, position, isRed] = lyrics[index];
+      const element = document.createElement("div");
+
+      element.className = "lyric";
+      if (isRed) element.classList.add("red");
+
+      element.textContent = text;
+
+      Object.assign(element.style, getPosition(position));
+
+      lyricsArea.appendChild(element);
+      currentLyricElement = element;
+    }
+
+    function updateLyrics() {
+      const currentTime = audio.currentTime;
+      let targetIndex = -1;
+
+      for (let i = 0; i < lyrics.length; i++) {
+        if (currentTime >= lyrics[i][0]) {
+          targetIndex = i;
+        } else {
+          break;
+        }
+      }
+
+      if (targetIndex !== currentLyricIndex) {
+        currentLyricIndex = targetIndex;
+        showLyric(targetIndex);
+      }
+
+      progress.value = currentTime;
+
+      timeDisplay.textContent =
+        `${formatTime(currentTime)} / ${formatTime(audio.duration || 47)}`;
+    }
+
+    function fadeInAudio() {
+      clearInterval(fadeInterval);
+
+      audio.volume = 0;
+
+      const duration = 2000;
+      const steps = 40;
+      const stepTime = duration / steps;
+      let step = 0;
+
+      fadeInterval = setInterval(() => {
+        step++;
+
+        audio.volume = Math.min(step / steps, 1);
+
+        if (step >= steps) {
+          clearInterval(fadeInterval);
+          fadeInterval = null;
+        }
+      }, stepTime);
+    }
+
+    async function startPlayback() {
+      try {
+        await audio.play();
+
+        document.body.classList.add("playing");
+        intro.classList.add("hidden");
+        lyricsArea.classList.add("visible");
+        controls.classList.add("visible");
+
+        pauseButton.textContent = "Ⅱ";
+
+        fadeInAudio();
+      } catch (error) {
+        alert(
+          "Audio gagal diputar. Pastikan file magnolia.mp3 berada di folder yang sama dengan index.html."
+        );
+      }
+    }
+
+    playButton.addEventListener("click", startPlayback);
+
+    pauseButton.addEventListener("click", async () => {
+      if (audio.paused) {
+        try {
+          await audio.play();
+          pauseButton.textContent = "Ⅱ";
+        } catch (error) {
+          console.error("Audio gagal dilanjutkan:", error);
+        }
+      } else {
+        audio.pause();
+        pauseButton.textContent = "▶";
+      }
+    });
+
+    progress.addEventListener("input", () => {
+      audio.currentTime = Number(progress.value);
+      updateLyrics();
+    });
+
+    audio.addEventListener("timeupdate", updateLyrics);
+
+    audio.addEventListener("loadedmetadata", () => {
+      progress.max = audio.duration;
+      timeDisplay.textContent =
+        `0:00 / ${formatTime(audio.duration)}`;
+    });
+
+    audio.addEventListener("ended", () => {
+      clearInterval(fadeInterval);
+
+      if (currentLyricElement) {
+        currentLyricElement.remove();
+        currentLyricElement = null;
+      }
+
+      currentLyricIndex = -1;
+      pauseButton.textContent = "▶";
+    });
+  </script>
+
+</body>
+</html>
