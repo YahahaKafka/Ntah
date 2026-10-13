@@ -365,35 +365,35 @@ const lyrics = [
         red: false
     },
     {
-        time: 10.02,
+        time: 9.80,
         text: "Wrecking balls and millions stones",
         x: 50,
         y: 27,
         red: false
     },
     {
-        time: 12.80,
+        time: 12.00,
         text: "Will never took away",
         x: 50,
         y: 69,
         red: true
     },
     {
-        time: 16.96,
+        time: 16.00,
         text: "My strongest will to say",
         x: 27,
         y: 43,
         red: true
     },
     {
-        time: 20.86,
+        time: 20.00,
         text: "The words you long to hear",
         x: 70,
         y: 31,
         red: false
     },
     {
-        time: 24.62,
+        time: 24.00,
         text: "The city's falling down and down",
         x: 50,
         y: 60,
@@ -432,7 +432,7 @@ function updatePoster(time) {
             poster.style.opacity = "0";
             posterState = "hidden";
         }
-    } else if (time < 10) {
+    } else if (time < 8) {
         if (posterState !== "shown") {
             poster.classList.remove("hide");
             poster.classList.add("show");
