@@ -314,21 +314,14 @@ document.getElementById("playButton").addEventListener("click", async () => {
 
 // Poster tampil sesaat sebelum lirik pertama.
 function updatePoster(time) {
-    if (time >= 2 && time < 10) {
-        if (!poster.classList.contains("show")) {
-            poster.classList.remove("hide");
-            poster.classList.add("show");
-        }
-    } else {
-        if (poster.classList.contains("show")) {
-            poster.classList.remove("show");
-            poster.classList.add("hide");
-        }
+    poster.classList.remove("show", "hide");
+    poster.style.opacity = "0";
 
-        if (time < 2) {
-            poster.classList.remove("show", "hide");
-            poster.style.opacity = "0";
-        }
+    if (time >= 2 && time < 10) {
+        poster.style.opacity = "";
+        poster.classList.add("show");
+    } else {
+        poster.classList.add("hide");
     }
 }
 
