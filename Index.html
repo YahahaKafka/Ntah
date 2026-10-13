@@ -1,454 +1,442 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Magnolia | Lyrics</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magnolia Celebration</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    transition: background 1s ease;
+}
+
+body.playing {
+    background: black;
+}
+
+#intro {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    z-index: 10;
+    transition: opacity 1s ease;
+}
+
+#playButton {
+    width: 0;
+    height: 0;
+    border-top: 28px solid transparent;
+    border-bottom: 28px solid transparent;
+    border-left: 42px solid black;
+    background: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#intro.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#scene {
+    position: fixed;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+#scene.visible {
+    opacity: 1;
+}
+
+#snow {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+#poster {
+    position: fixed;
+    width: min(72vw, 340px);
+    max-height: 65vh;
+    object-fit: contain;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+#poster.show {
+    animation: posterIn 0.5s ease forwards;
+}
+
+#poster.hide {
+    animation: posterOut 0.5s ease forwards;
+}
+
+@keyframes posterIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -47%) scale(0.96);
     }
-
-    body {
-      height: 100vh;
-      overflow: hidden;
-      background: #fff;
-      color: white;
-      font-family: Arial, sans-serif;
-      transition: background 2s ease;
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
     }
+}
 
-    body.playing {
-      background: #000;
+@keyframes posterOut {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
     }
-
-    /* Intro */
-    #intro {
-      position: fixed;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      background: white;
-      z-index: 20;
-      transition: opacity 1s ease;
+    to {
+        opacity: 0;
+        transform: translate(-50%, -53%) scale(1.02);
     }
+}
 
-    #intro.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+.lyric {
+    position: absolute;
+    max-width: 85%;
+    font-size: clamp(18px, 4vw, 30px);
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.4;
+    text-shadow: 0 0 10px currentColor;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    z-index: 2;
+}
 
-    #playButton {
-      width: 80px;
-      height: 80px;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-    }
+.lyric.show {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-    #playButton::after {
-      content: "";
-      width: 0;
-      height: 0;
-      border-top: 25px solid transparent;
-      border-bottom: 25px solid transparent;
-      border-left: 38px solid black;
-      margin-left: 8px;
-    }
+.red {
+    color: #ff3030;
+    text-shadow:
+        0 0 5px #ff0000,
+        0 0 15px #ff0000,
+        0 0 30px #a00000;
+}
 
-    /* Salju */
-    #snow {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0;
-      transition: opacity 2s ease;
-    }
+#controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(88%, 450px);
+    z-index: 8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
 
-    #snow.visible {
-      opacity: 1;
-    }
+#controls.visible {
+    opacity: 1;
+}
 
-    /* Lirik */
-    #lyricsArea {
-      position: fixed;
-      inset: 0;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 1.5s ease;
-    }
+#pauseButton {
+    background: transparent;
+    border: 1px solid #777;
+    border-radius: 50%;
+    color: white;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
 
-    #lyricsArea.visible {
-      opacity: 1;
-    }
+#progress {
+    flex: 1;
+    accent-color: white;
+    min-width: 0;
+}
 
+#time {
+    font-size: 12px;
+    color: #ccc;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
     .lyric {
-      position: absolute;
-      max-width: 84%;
-      color: #f5f5f5;
-      font-size: clamp(22px, 5vw, 42px);
-      font-weight: 700;
-      line-height: 1.3;
-      overflow-wrap: break-word;
-      text-shadow: 0 2px 14px rgba(255,255,255,.15);
-      animation: lyricIn .8s ease both;
+        max-width: 90%;
     }
-
-    .lyric.red {
-      color: #ff2638;
-      text-shadow:
-        0 0 8px rgba(255,0,25,.45),
-        0 0 20px rgba(255,0,25,.2);
-    }
-
-    .lyric.out {
-      animation: lyricOut .45s ease both;
-    }
-
-    @keyframes lyricIn {
-      from {
-        opacity: 0;
-        filter: blur(6px);
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        filter: blur(0);
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes lyricOut {
-      from {
-        opacity: 1;
-        filter: blur(0);
-      }
-      to {
-        opacity: 0;
-        filter: blur(5px);
-      }
-    }
-
-    /* Poster di tengah */
-    #posterWrap {
-      position: fixed;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      z-index: 4;
-      pointer-events: none;
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    #posterWrap.show {
-      visibility: visible;
-      animation: posterIn .5s ease forwards;
-    }
-
-    #posterWrap.hide {
-      visibility: visible;
-      animation: posterOut .5s ease forwards;
-    }
-
-    #poster {
-      width: min(58vw, 340px);
-      max-height: 52vh;
-      object-fit: cover;
-      aspect-ratio: 1 / 1;
-      border: 1px solid rgba(255,255,255,.2);
-      box-shadow: 0 0 50px rgba(255,255,255,.12);
-    }
-
-    @keyframes posterIn {
-      from {
-        opacity: 0;
-        transform: scale(.96);
-        filter: blur(5px);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-        filter: blur(0);
-      }
-    }
-
-    @keyframes posterOut {
-      from {
-        opacity: 1;
-        transform: scale(1);
-        filter: blur(0);
-      }
-      to {
-        opacity: 0;
-        transform: scale(1.03);
-        filter: blur(5px);
-      }
-    }
-
-    /* Pemutar lagu */
-    #controls {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 18px 16px 25px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      z-index: 6;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-
-    #controls.visible {
-      opacity: 1;
-    }
-
-    #pauseButton {
-      color: white;
-      background: transparent;
-      border: 0;
-      font-size: 23px;
-      cursor: pointer;
-      min-width: 30px;
-    }
-
-    #progress {
-      width: min(65vw, 500px);
-      accent-color: white;
-      cursor: pointer;
-    }
-
-    #time {
-      min-width: 78px;
-      text-align: center;
-      font-size: 12px;
-      color: #ccc;
-    }
-
-    @media (max-width: 480px) {
-      #poster {
-        width: 65vw;
-      }
-
-      #controls {
-        gap: 8px;
-        padding-bottom: 22px;
-      }
-
-      #time {
-        min-width: 66px;
-        font-size: 11px;
-      }
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-  <div id="intro">
+<div id="intro">
     <button id="playButton" aria-label="Putar lagu"></button>
-  </div>
+</div>
 
-  <canvas id="snow"></canvas>
+<div id="scene">
+    <img id="poster" src="poster.jpg" alt="Magnolia Celebration">
 
-  <div id="lyricsArea"></div>
+    <div id="lyrics"></div>
 
-  <div id="posterWrap">
-    <img id="poster" src="poster.jpg" alt="Poster lagu Magnolia">
-  </div>
+    <canvas id="snow"></canvas>
+</div>
 
-  <div id="controls">
+<div id="controls">
     <button id="pauseButton" aria-label="Jeda lagu">Ⅱ</button>
-    <input id="progress" type="range"
-           min="0" max="47" step="0.01" value="0">
-    <span id="time">0:00 / 0:47</span>
-  </div>
+    <input id="progress" type="range" min="0" max="39" step="0.05" value="0">
+    <span id="time">0:00</span>
+</div>
 
-  <audio id="audio" preload="auto">
-    <source src="magnolia.mp3" type="audio/mpeg">
-  </audio>
+<audio id="audio" src="magnolia.mp3" preload="auto"></audio>
 
-  <script>
-    const audio = document.getElementById("audio");
-    const intro = document.getElementById("intro");
-    const playButton = document.getElementById("playButton");
-    const lyricsArea = document.getElementById("lyricsArea");
-    const posterWrap = document.getElementById("posterWrap");
-    const snowCanvas = document.getElementById("snow");
-    const ctx = snowCanvas.getContext("2d");
-    const controls = document.getElementById("controls");
-    const pauseButton = document.getElementById("pauseButton");
-    const progress = document.getElementById("progress");
-    const timeDisplay = document.getElementById("time");
+<script>
+const audio = document.getElementById("audio");
+const intro = document.getElementById("intro");
+const scene = document.getElementById("scene");
+const poster = document.getElementById("poster");
+const lyricsContainer = document.getElementById("lyrics");
+const pauseButton = document.getElementById("pauseButton");
+const progress = document.getElementById("progress");
+const timeDisplay = document.getElementById("time");
+const controls = document.getElementById("controls");
 
-    /*
-      Audio dipotong dari 01:53 sampai 02:40.
-      Waktu lirik dihitung dari awal file potongan.
-    */
-    const lyrics = [
-      [18.22, "Wrecking balls and millions stones", "left", false],
-      [21.00, "Will never took away", "right", true],
-      [25.16, "My strongest will to say", "left", false],
-      [29.06, "The words you long to hear", "right", true],
-      [32.82, "The city's falling down and down", "left", true],
-      [36.45, "This very old long way", "right", false],
-      [39.75, "I don't need to say more", "left", true],
-      [43.34, "The words you long to hear", "right", true]
-    ];
-
-    let currentLyricIndex = -1;
-    let currentLyricElement = null;
-    let fadeTimer = null;
-    let posterShown = false;
-    let posterHidden = false;
-    let snowflakes = [];
-    let animationFrame = null;
-
-    const POSTER_START = 16.4;
-    const POSTER_END = 18.0;
-    const AUDIO_FADE_DURATION = 1.5;
-
-    function formatTime(seconds) {
-      seconds = Math.max(0, seconds || 0);
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${mins}:${String(secs).padStart(2, "0")}`;
+// Semua waktu menggunakan detik relatif dari awal potongan 02:01.
+const lyrics = [
+    {
+        time: 10.22,
+        text: "Wrecking balls and millions stones",
+        x: 50, y: 27, red: false
+    },
+    {
+        time: 13.00,
+        text: "Will never took away",
+        x: 50, y: 69, red: true
+    },
+    {
+        time: 17.16,
+        text: "My strongest will to say",
+        x: 27, y: 43, red: true
+    },
+    {
+        time: 21.06,
+        text: "The words you long to hear",
+        x: 70, y: 31, red: false
+    },
+    {
+        time: 24.82,
+        text: "The city's falling down and down",
+        x: 50, y: 60, red: true
+    },
+    {
+        time: 28.45,
+        text: "This very old long way",
+        x: 30, y: 32, red: false
+    },
+    {
+        time: 31.75,
+        text: "I don't need to say more",
+        x: 68, y: 66, red: true
+    },
+    {
+        time: 35.34,
+        text: "The words you long to hear",
+        x: 50, y: 42, red: false
     }
+];
 
-    /* Fade in volume 1,5 detik */
-    function fadeInAudio() {
-      clearInterval(fadeTimer);
+const lyricElements = lyrics.map(item => {
+    const element = document.createElement("div");
+    element.className = "lyric" + (item.red ? " red" : "");
+    element.textContent = item.text;
+    element.style.left = item.x + "%";
+    element.style.top = item.y + "%";
+    element.style.transform = "translate(-50%, 10px)";
+    lyricsContainer.appendChild(element);
+    return element;
+});
 
-      audio.volume = 0;
-      const steps = 30;
-      let step = 0;
+// Mulai lagu dengan fade-in volume selama 1,5 detik.
+function fadeInAudio() {
+    audio.volume = 0;
+    const startTime = performance.now();
+    const duration = 1500;
 
-      fadeTimer = setInterval(() => {
-        step++;
-        audio.volume = Math.min(step / steps, 1);
+    function fade(timestamp) {
+        const elapsed = timestamp - startTime;
+        audio.volume = Math.min(elapsed / duration, 1);
 
-        if (step >= steps) {
-          clearInterval(fadeTimer);
-          fadeTimer = null;
+        if (elapsed < duration && !audio.paused) {
+            requestAnimationFrame(fade);
         }
-      }, AUDIO_FADE_DURATION * 1000 / steps);
     }
 
-    /* Posisi lirik */
-    function getPosition(position) {
-      const randomTop = 16 + Math.random() * 58;
+    requestAnimationFrame(fade);
+}
 
-      switch (position) {
-        case "left":
-          return {
-            left: "7%",
-            top: `${randomTop}%`
-          };
+// Tombol play pertama.
+document.getElementById("playButton").addEventListener("click", async () => {
+    try {
+        await audio.play();
 
-        case "right":
-          return {
-            right: "7%",
-            top: `${randomTop}%`,
-            textAlign: "right"
-          };
+        intro.classList.add("hidden");
+        scene.classList.add("visible");
+        document.body.classList.add("playing");
+        controls.classList.add("visible");
 
-        case "top":
-          return {
-            left: "8%",
-            top: "12%"
-          };
-
-        case "bottom":
-          return {
-            right: "8%",
-            bottom: "16%",
-            textAlign: "right"
-          };
-
-        case "center":
-          return {
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center"
-          };
-
-        default:
-          return {
-            left: `${5 + Math.random() * 40}%`,
-            top: `${randomTop}%`
-          };
-      }
+        fadeInAudio();
+    } catch (error) {
+        alert("Lagu tidak bisa diputar. Pastikan magnolia.mp3 ada di folder yang sama.");
     }
+});
 
-    function showLyric(index) {
-      if (currentLyricElement) {
-        const old = currentLyricElement;
-        old.classList.add("out");
-        setTimeout(() => old.remove(), 450);
-      }
-
-      currentLyricElement = null;
-
-      if (index < 0 || index >= lyrics.length) return;
-
-      const [, text, position, isRed] = lyrics[index];
-      const el = document.createElement("div");
-
-      el.className = "lyric";
-      if (isRed) el.classList.add("red");
-      el.textContent = text;
-
-      Object.assign(el.style, getPosition(position));
-      lyricsArea.appendChild(el);
-      currentLyricElement = el;
-    }
-
-    /* Poster muncul singkat sebelum lirik pertama */
-    function updatePoster(time) {
-      if (time >= POSTER_START && time < POSTER_END) {
-        if (!posterShown) {
-          posterShown = true;
-          posterHidden = false;
-          posterWrap.classList.remove("hide");
-          posterWrap.classList.add("show");
+// Poster tampil sesaat sebelum lirik pertama.
+function updatePoster(time) {
+    if (time >= 8.4 && time < 10) {
+        if (!poster.classList.contains("show")) {
+            poster.classList.remove("hide");
+            poster.classList.add("show");
         }
-      } else if (time >= POSTER_END || time < POSTER_START) {
-        if (posterShown && !posterHidden) {
-          posterHidden = true;
-          posterWrap.classList.remove("show");
-          posterWrap.classList.add("hide");
+    } else {
+        if (poster.classList.contains("show")) {
+            poster.classList.remove("show");
+            poster.classList.add("hide");
         }
-      }
+
+        if (time < 8.4) {
+            poster.classList.remove("show", "hide");
+            poster.style.opacity = "0";
+        }
     }
+}
 
-    function updateLyrics() {
-      const time = audio.currentTime;
-      let target = -1;
+// Tampilkan lirik sesuai waktu lagu.
+function updateLyrics(time) {
+    lyrics.forEach((item, index) => {
+        const nextTime = lyrics[index + 1]
+            ? lyrics[index + 1].time
+            : Infinity;
 
-      for (let i = 0; i < lyrics.length; i++) {
-        if (time >= lyrics[i][0]) target = i;
-        else break;
-      }
+        const active = time >= item.time && time < nextTime;
+        lyricElements[index].classList.toggle("show", active);
+    });
+}
 
-      if (target !== currentLyricIndex) {
-        currentLyricIndex = target;
-        showLyric(target);
-      }
+function formatTime(seconds) {
+    const safe = Math.floor(seconds || 0);
+    return Math.floor(safe / 60) + ":" +
+        String(safe % 60).padStart(2, "0");
+}
 
-      updatePoster(time);
+audio.addEventListener("timeupdate", () => {
+    const time = audio.currentTime;
+
+    updatePoster(time);
+    updateLyrics(time);
+
+    progress.value = time;
+    timeDisplay.textContent = formatTime(time);
+});
+
+audio.addEventListener("loadedmetadata", () => {
+    progress.max = audio.duration;
+});
+
+pauseButton.addEventListener("click", () => {
+    if (audio.paused) {
+        audio.play();
+        pauseButton.textContent = "Ⅱ";
+    } else {
+        audio.pause();
+        pauseButton.textContent = "▶";
+    }
+});
+
+progress.addEventListener("input", () => {
+    audio.currentTime = Number(progress.value);
+    updatePoster(audio.currentTime);
+    updateLyrics(audio.currentTime);
+});
+
+// Efek salju.
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+let flakes = [];
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    flakes = Array.from({ length: 100 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2.5 + 0.5,
+        speed: Math.random() * 1.5 + 0.5,
+        drift: Math.random() * 0.8 - 0.4,
+        opacity: Math.random() * 0.7 + 0.2
+    }));
+}
+
+function drawSnow() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    flakes.forEach(flake => {
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${flake.opacity})`;
+        ctx.fill();
+
+        flake.y += flake.speed;
+        flake.x += flake.drift;
+
+        if (flake.y > canvas.height) {
+            flake.y = -5;
+            flake.x = Math.random() * canvas.width;
+        }
+
+        if (flake.x > canvas.width) flake.x = 0;
+        if (flake.x < 0) flake.x = canvas.width;
+    });
+
+    requestAnimationFrame(drawSnow);
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+drawSnow();
+
+audio.addEventListener("ended", () => {
+    lyricElements.forEach(element => element.classList.remove("show"));
+    poster.classList.remove("show");
+    poster.classList.add("hide");
+    pauseButton.textContent = "▶";
+});
+</script>
+
+</body>
+</html>atePoster(time);
 
       progress.value = time;
       timeDisplay.textContent =
