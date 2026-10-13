@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Magnolia ♡</title>
 
 <style>
@@ -12,23 +12,23 @@
 
 body {
     margin: 0;
+    overflow: hidden;
     background: white;
     font-family: Arial, sans-serif;
-    overflow: hidden;
 }
 
-/* INTRO */
+/* HALAMAN INTRO */
 #intro {
     position: fixed;
     inset: 0;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
     opacity: 1;
     visibility: visible;
-    transition: opacity .7s ease, visibility .7s;
+    transition: opacity .6s ease, visibility .6s;
 }
 
 #intro.hide {
@@ -37,13 +37,13 @@ body {
     pointer-events: none;
 }
 
-/* TOMBOL PLAY IMUT */
+/* TOMBOL PLAY KUCING */
 #playIntro {
     width: 112px;
     height: 112px;
     border: 2px solid #222;
     border-radius: 50%;
-    background: #fff;
+    background: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,19 +59,19 @@ body {
 }
 
 #playIntro svg {
-    width: 76px;
-    height: 76px;
+    width: 78px;
+    height: 78px;
 }
 
-/* SCENE */
+/* ADEGAN LAGU */
 #scene {
     position: fixed;
     inset: 0;
+    overflow: hidden;
     background: #050505;
     opacity: 0;
     visibility: hidden;
-    overflow: hidden;
-    transition: opacity .8s ease, visibility .8s;
+    transition: opacity .7s ease, visibility .7s;
 }
 
 #scene.active {
@@ -92,11 +92,11 @@ body {
 /* POSTER */
 #poster {
     position: absolute;
+    left: 50%;
+    top: 50%;
     width: min(70vw, 330px);
     max-height: 62vh;
     object-fit: contain;
-    left: 50%;
-    top: 50%;
     transform: translate(-50%, -50%);
     opacity: 0;
     z-index: 3;
@@ -149,8 +149,8 @@ body {
     color: white;
     font-size: clamp(17px, 4vw, 27px);
     font-weight: 600;
-    text-shadow: 0 2px 12px #000;
-    animation: lyricIn .7s ease both;
+    text-shadow: 0 2px 12px black;
+    animation: lyricIn .65s ease both;
 }
 
 .lyric.red {
@@ -174,9 +174,9 @@ body {
 #goofyLayer {
     position: absolute;
     inset: 0;
+    z-index: 4;
     overflow: hidden;
     pointer-events: none;
-    z-index: 4;
 }
 
 .goofy {
@@ -206,48 +206,41 @@ body {
 
 @keyframes goofyFly {
     0% {
-        transform: translateX(-10vw) translateY(0)
-                   rotate(-15deg) scale(.7);
+        transform: translate(0, 0) rotate(-15deg) scale(.7);
         opacity: 0;
     }
     12% {
         opacity: 1;
     }
     40% {
-        transform: translateX(35vw) translateY(-35px)
-                   rotate(15deg) scale(1.1);
+        transform: translate(35vw, -35px) rotate(15deg) scale(1.1);
     }
     70% {
-        transform: translateX(75vw) translateY(25px)
-                   rotate(-10deg) scale(.9);
+        transform: translate(75vw, 25px) rotate(-10deg) scale(.9);
         opacity: 1;
     }
     100% {
-        transform: translateX(120vw) translateY(-15px)
-                   rotate(20deg) scale(.7);
+        transform: translate(120vw, -15px) rotate(20deg) scale(.7);
         opacity: 0;
     }
 }
 
 @keyframes doodleFly {
     0% {
-        transform: translateX(-10vw) translateY(20px)
-                   rotate(-25deg);
+        transform: translate(0, 20px) rotate(-25deg);
         opacity: 0;
     }
     15% {
         opacity: .95;
     }
     50% {
-        transform: translateX(50vw) translateY(-45px)
-                   rotate(25deg);
+        transform: translate(50vw, -45px) rotate(25deg);
     }
     85% {
         opacity: .95;
     }
     100% {
-        transform: translateX(120vw) translateY(15px)
-                   rotate(45deg);
+        transform: translate(120vw, 15px) rotate(45deg);
         opacity: 0;
     }
 }
@@ -258,57 +251,52 @@ body {
 
 <!-- TOMBOL PLAY KUCING -->
 <div id="intro">
-    <button id="playIntro" aria-label="Putar lagu Magnolia">
+    <button id="playIntro" aria-label="Putar Magnolia">
         <svg viewBox="0 0 100 100"
              xmlns="http://www.w3.org/2000/svg">
-            <!-- Telinga -->
             <path d="M25 35 L23 15 L42 27
                      M58 27 L77 15 L75 35"
                   fill="white" stroke="#222"
                   stroke-width="3.5"
                   stroke-linejoin="round"/>
 
-            <!-- Wajah -->
             <circle cx="50" cy="48" r="30"
                     fill="white" stroke="#222"
                     stroke-width="3.5"/>
 
-            <!-- Mata -->
             <circle cx="39" cy="45" r="3.2" fill="#222"/>
             <circle cx="61" cy="45" r="3.2" fill="#222"/>
 
-            <!-- Hidung -->
             <path d="M46 52 Q50 56 54 52"
                   fill="none" stroke="#222"
                   stroke-width="2.5"
                   stroke-linecap="round"/>
 
-            <!-- Kumis -->
             <path d="M35 53 L21 50 M35 58 L23 61
                      M65 53 L79 50 M65 58 L77 61"
                   fill="none" stroke="#222"
                   stroke-width="2"
                   stroke-linecap="round"/>
 
-            <!-- Play kecil -->
             <path d="M44 68 L44 84 L60 76 Z"
                   fill="#ff8ca8" stroke="#222"
                   stroke-width="2"
                   stroke-linejoin="round"/>
 
-            <!-- Pipi -->
             <circle cx="32" cy="53" r="4"
-                    fill="#ffb6c8" opacity=".9"/>
+                    fill="#ffb6c8"/>
             <circle cx="68" cy="53" r="4"
-                    fill="#ffb6c8" opacity=".9"/>
+                    fill="#ffb6c8"/>
         </svg>
     </button>
 </div>
 
+<!-- AUDIO -->
 <audio id="audio" preload="auto">
     <source src="magnolia.mp3" type="audio/mpeg">
 </audio>
 
+<!-- ADEGAN UTAMA -->
 <div id="scene">
     <canvas id="snow"></canvas>
     <img id="poster" src="poster.jpg" alt="Magnolia poster">
@@ -327,32 +315,49 @@ const goofyLayer = document.getElementById("goofyLayer");
 
 /* LIRIK */
 const lyrics = [
-    { time: 10.02, text: "Wrecking balls and millions stones",
-      x: 50, y: 27, red: false },
-
-    { time: 12.80, text: "Will never took away",
-      x: 50, y: 69, red: true },
-
-    { time: 16.96, text: "My strongest will to say",
-      x: 27, y: 43, red: true },
-
-    { time: 20.86, text: "The words you long to hear",
-      x: 70, y: 31, red: false },
-
-    { time: 24.62, text: "The city's falling down and down",
-      x: 50, y: 60, red: true },
-
-    { time: 28.25, text: "This very old long way",
-      x: 30, y: 32, red: false },
-
-    { time: 31.55, text: "I don't need to say more",
-      x: 68, y: 66, red: true },
-
-    { time: 35.14, text: "The words you long to hear",
-      x: 50, y: 42, red: false }
+    {
+        time: 10.02,
+        text: "Wrecking balls and millions stones",
+        x: 50, y: 27, red: false
+    },
+    {
+        time: 12.80,
+        text: "Will never took away",
+        x: 50, y: 69, red: true
+    },
+    {
+        time: 16.96,
+        text: "My strongest will to say",
+        x: 27, y: 43, red: true
+    },
+    {
+        time: 20.86,
+        text: "The words you long to hear",
+        x: 70, y: 31, red: false
+    },
+    {
+        time: 24.62,
+        text: "The city's falling down and down",
+        x: 50, y: 60, red: true
+    },
+    {
+        time: 28.25,
+        text: "This very old long way",
+        x: 30, y: 32, red: false
+    },
+    {
+        time: 31.55,
+        text: "I don't need to say more",
+        x: 68, y: 66, red: true
+    },
+    {
+        time: 35.14,
+        text: "The words you long to hear",
+        x: 50, y: 42, red: false
+    }
 ];
 
-/* POSTER: DETIK 2 SAMPAI 10 */
+/* POSTER MUNCUL DETIK 2, HILANG SETELAH DETIK 10 */
 let posterState = "hidden";
 
 function updatePoster(time) {
@@ -377,7 +382,7 @@ function updatePoster(time) {
     }
 }
 
-/* LIRIK MUNCUL BERGANTIAN */
+/* LIRIK BERGANTIAN */
 let lastLyricIndex = -1;
 
 function updateLyrics(time) {
@@ -407,15 +412,16 @@ function updateLyrics(time) {
     }
 }
 
-/* AUDIO FADE-IN */
+/* FADE-IN AUDIO 1,5 DETIK */
 let fadeInterval = null;
 
 function fadeAudioIn() {
     clearInterval(fadeInterval);
 
-    audio.volume = 0;
+    const steps = 30;
     let step = 0;
-    const totalSteps = 30;
+
+    audio.volume = 0;
 
     fadeInterval = setInterval(() => {
         if (audio.paused) {
@@ -425,13 +431,120 @@ function fadeAudioIn() {
         }
 
         step++;
-        audio.volume = Math.min(1, step / totalSteps);
+        audio.volume = Math.min(1, step / steps);
 
-        if (step >= totalSteps) {
+        if (step >= steps) {
             clearInterval(fadeInterval);
             fadeInterval = null;
         }
     }, 50);
+}
+
+/* DOODLE PUTIH */
+const planeDoodle = `
+<svg viewBox="0 0 100 100" fill="none"
+     stroke="white" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 49 L85 17 L63 57 L43 67
+             L34 87 L30 60 Z"/>
+    <path d="M30 60 L85 17 L43 67"/>
+    <path d="M12 49 L43 67"/>
+    <path d="M8 30 L20 34 M8 72 L18 68"
+          stroke-dasharray="3 5"/>
+</svg>`;
+
+const ghostDoodle = `
+<svg viewBox="0 0 100 100" fill="none"
+     stroke="white" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 80 L22 43 C22 6 78 6 78 43
+             L78 80 L65 72 L54 81 L43 72 L31 81 Z"/>
+    <circle cx="40" cy="43" r="3" fill="white"/>
+    <circle cx="60" cy="43" r="3" fill="white"/>
+    <path d="M42 57 Q50 64 58 57"/>
+</svg>`;
+
+const starDoodle = `
+<svg viewBox="0 0 100 100" fill="none"
+     stroke="white" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 8 L60 37 L91 40 L67 59
+             L75 90 L50 72 L25 90 L33 59
+             L9 40 L40 37 Z"/>
+    <path d="M80 12 L83 21 L92 24 L83 27
+             L80 36 L77 27 L68 24 L77 21 Z"/>
+</svg>`;
+
+/* OBJEK GOOFY */
+const goofyObjects = [
+    { type: "emoji", content: "✈️" },
+    { type: "emoji", content: "🦆🛹" },
+    { type: "emoji", content: "💀" },
+    { type: "emoji", content: "🛸" },
+    { type: "emoji", content: "🐈" },
+    { type: "emoji", content: "🗿" },
+    { type: "doodle", content: planeDoodle },
+    { type: "doodle", content: ghostDoodle },
+    { type: "doodle", content: starDoodle }
+];
+
+let goofyTimer = null;
+
+function spawnGoofy() {
+    if (audio.paused || audio.ended) return;
+
+    const item = goofyObjects[
+        Math.floor(Math.random() * goofyObjects.length)
+    ];
+
+    const object = document.createElement("div");
+    object.className = "goofy " + item.type;
+
+    if (item.type === "emoji") {
+        object.textContent = item.content;
+        object.style.fontSize =
+            (25 + Math.random() * 25) + "px";
+    } else {
+        object.innerHTML = item.content;
+
+        const size = 40 + Math.random() * 40;
+        object.style.width = size + "px";
+        object.style.height = size + "px";
+    }
+
+    object.style.top = (12 + Math.random() * 68) + "%";
+    goofyLayer.appendChild(object);
+
+    const duration = item.type === "emoji" ? 5000 : 6000;
+
+    setTimeout(() => object.remove(), duration);
+}
+
+function scheduleGoofy() {
+    if (audio.paused || audio.ended) {
+        goofyTimer = null;
+        return;
+    }
+
+    goofyTimer = setTimeout(() => {
+        goofyTimer = null;
+        spawnGoofy();
+        scheduleGoofy();
+    }, 1800 + Math.random() * 3200);
+}
+
+function startGoofy() {
+    if (goofyTimer !== null) return;
+
+    spawnGoofy();
+    scheduleGoofy();
+}
+
+function stopGoofy() {
+    if (goofyTimer !== null) {
+        clearTimeout(goofyTimer);
+        goofyTimer = null;
+    }
 }
 
 /* TOMBOL PLAY */
@@ -441,11 +554,12 @@ playIntro.addEventListener("click", async () => {
     if (starting) return;
 
     starting = true;
-    audio.currentTime = 0;
-    audio.volume = 0;
 
     scene.classList.add("active");
     intro.classList.add("hide");
+
+    audio.currentTime = 0;
+    audio.volume = 0;
 
     try {
         await audio.play();
@@ -453,6 +567,126 @@ playIntro.addEventListener("click", async () => {
         startGoofy();
     } catch (error) {
         scene.classList.remove("active");
+        intro.classList.remove("hide");
+        starting = false;
+
+        alert(
+            "Audio gagal diputar. Pastikan file magnolia.mp3 ada di repository."
+        );
+    }
+});
+
+/* UPDATE ADEGAN MENGIKUTI WAKTU LAGU */
+audio.addEventListener("timeupdate", () => {
+    updatePoster(audio.currentTime);
+    updateLyrics(audio.currentTime);
+});
+
+/* SALJU */
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+
+let snowflakes = [];
+
+function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+
+    canvas.width = window.innerWidth * ratio;
+    canvas.height = window.innerHeight * ratio;
+
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    snowflakes = [];
+
+    const amount = Math.min(
+        120,
+        Math.floor(window.innerWidth / 5)
+    );
+
+    for (let i = 0; i < amount; i++) {
+        snowflakes.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            radius: .7 + Math.random() * 2,
+            speed: .4 + Math.random() * 1.3,
+            drift: -.35 + Math.random() * .7,
+            opacity: .25 + Math.random() * .65
+        });
+    }
+}
+
+function drawSnow() {
+    ctx.clearRect(
+        0, 0, window.innerWidth, window.innerHeight
+    );
+
+    for (const flake of snowflakes) {
+        ctx.beginPath();
+
+        ctx.arc(
+            flake.x,
+            flake.y,
+            flake.radius,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            "rgba(255,255,255," + flake.opacity + ")";
+        ctx.fill();
+
+        flake.y += flake.speed;
+        flake.x += flake.drift;
+
+        if (flake.y > window.innerHeight + 5) {
+            flake.y = -5;
+            flake.x = Math.random() * window.innerWidth;
+        }
+
+        if (flake.x < -5) {
+            flake.x = window.innerWidth + 5;
+        }
+
+        if (flake.x > window.innerWidth + 5) {
+            flake.x = -5;
+        }
+    }
+
+    requestAnimationFrame(drawSnow);
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+resizeCanvas();
+drawSnow();
+
+/* LAGU SELESAI: KEMBALI KE TOMBOL KUCING */
+audio.addEventListener("ended", () => {
+    clearInterval(fadeInterval);
+    fadeInterval = null;
+
+    stopGoofy();
+
+    goofyLayer.innerHTML = "";
+    lyricsContainer.innerHTML = "";
+
+    poster.classList.remove("show", "hide");
+    poster.style.opacity = "0";
+
+    posterState = "hidden";
+    lastLyricIndex = -1;
+    starting = false;
+
+    scene.classList.remove("active");
+    intro.classList.remove("hide");
+});
+</script>
+
+</body>
+</html>ve");
         intro.classList.remove("hide");
         starting = false;
 
