@@ -231,32 +231,32 @@ const controls = document.getElementById("controls");
 /* Waktu lirik sudah dimajukan 0,2 detik */
 const lyrics = [
     {
-        time: 10.02,
+        time: 9.85,
         text: "Wrecking balls and millions stones",
         x: 50, y: 27, red: false
     },
     {
-        time: 12.80,
+        time: 12.00,
         text: "Will never took away",
         x: 50, y: 69, red: true
     },
     {
-        time: 16.96,
+        time: 16.00,
         text: "My strongest will to say",
         x: 27, y: 43, red: true
     },
     {
-        time: 20.86,
+        time: 20.00,
         text: "The words you long to hear",
         x: 70, y: 31, red: false
     },
     {
-        time: 24.62,
+        time: 24.00,
         text: "The city's falling down and down",
         x: 50, y: 60, red: true
     },
     {
-        time: 28.25,
+        time: 27.90,
         text: "This very old long way",
         x: 30, y: 32, red: false
     },
@@ -329,20 +329,20 @@ document.getElementById("playButton").addEventListener("click", async () => {
 
 /* Poster muncul pada detik 2 dan menghilang pada detik 10 */
 function updatePoster(time) {
+function updatePoster(time) {
     if (time >= 2 && time < 10) {
-        if (!poster.classList.contains("show")) {
-            poster.classList.remove("hide");
+        if (
+            !poster.classList.contains("show") &&
+            !poster.classList.contains("hide")
+        ) {
             poster.classList.add("show");
         }
+    } else if (time >= 10) {
+        poster.classList.remove("show");
+        poster.classList.add("hide");
     } else {
-        if (poster.classList.contains("show")) {
-            poster.classList.remove("show");
-            poster.classList.add("hide");
-        }
-
-        if (time < 2) {
-            poster.classList.remove("show", "hide");
-        }
+        poster.classList.remove("show", "hide");
+        poster.style.opacity = "0";
     }
 }
 
