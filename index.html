@@ -16,8 +16,7 @@ body {
     background: white;
     font-family: Arial, sans-serif;
 }
-
-/* INTRO */
+    
 #intro {
     position: fixed;
     inset: 0;
@@ -37,7 +36,6 @@ body {
     pointer-events: none;
 }
 
-/* TOMBOL PLAY KUCING */
 #playIntro {
     width: 112px;
     height: 112px;
@@ -64,7 +62,6 @@ body {
     height: 78px;
 }
 
-/* SCENE */
 #scene {
     position: fixed;
     inset: 0;
@@ -80,7 +77,6 @@ body {
     visibility: visible;
 }
 
-/* SALJU */
 #snow {
     position: absolute;
     inset: 0;
@@ -90,7 +86,6 @@ body {
     pointer-events: none;
 }
 
-/* POSTER */
 #poster {
     position: absolute;
     left: 50%;
@@ -134,7 +129,6 @@ body {
     }
 }
 
-/* LIRIK LEBIH HALUS */
 #lyrics {
     position: absolute;
     inset: 0;
@@ -196,7 +190,6 @@ body {
     }
 }
 
-/* EMOJI DAN DOODLE */
 #goofyLayer {
     position: absolute;
     inset: 0;
@@ -293,7 +286,6 @@ body {
 
 <body>
 
-<!-- TOMBOL PLAY KUCING -->
 <div id="intro">
     <button id="playIntro" aria-label="Putar Magnolia">
         <svg viewBox="0 0 100 100"
@@ -333,12 +325,10 @@ body {
     </button>
 </div>
 
-<!-- AUDIO -->
 <audio id="audio" preload="auto">
     <source src="magnolia.mp3" type="audio/mpeg">
 </audio>
 
-<!-- SCENE UTAMA -->
 <div id="scene">
     <canvas id="snow"></canvas>
     <img id="poster" src="poster.jpg" alt="Magnolia poster">
@@ -355,7 +345,6 @@ const poster = document.getElementById("poster");
 const lyricsContainer = document.getElementById("lyrics");
 const goofyLayer = document.getElementById("goofyLayer");
 
-/* LIRIK DAN TIMESTAMP */
 const lyrics = [
     {
         time: 8.02,
@@ -422,7 +411,6 @@ const lyrics = [
     }
 ];
 
-/* POSTER: MUNCUL DETIK 2, HILANG SETELAH DETIK 10 */
 let posterState = "hidden";
 
 function updatePoster(time) {
@@ -447,7 +435,6 @@ function updatePoster(time) {
     }
 }
 
-/* TRANSISI LIRIK */
 let lastLyricIndex = -1;
 let lyricChangeToken = 0;
 
@@ -488,7 +475,6 @@ function updateLyrics(time) {
     element.style.left = line.x + "%";
     element.style.top = line.y + "%";
 
-    // Tunda sedikit supaya transisi keluar terasa lebih lembut
     setTimeout(() => {
         if (token !== lyricChangeToken) return;
 
@@ -496,7 +482,6 @@ function updateLyrics(time) {
     }, oldLyric ? 120 : 0);
 }
 
-/* FADE-IN AUDIO 1,5 DETIK */
 let fadeInterval = null;
 
 function fadeAudioIn() {
@@ -524,7 +509,6 @@ function fadeAudioIn() {
     }, 50);
 }
 
-/* DOODLE PUTIH */
 const planeDoodle = `
 <svg viewBox="0 0 100 100" fill="none"
      stroke="white" stroke-width="3"
@@ -559,7 +543,6 @@ const starDoodle = `
              L80 36 L77 27 L68 24 L77 21 Z"/>
 </svg>`;
 
-/* OBJEK GOOFY */
 const goofyObjects = [
     { type: "emoji", content: "✈️" },
     { type: "emoji", content: "🦆🛹" },
@@ -631,7 +614,6 @@ function stopGoofy() {
     }
 }
 
-/* MULAI LAGU */
 let starting = false;
 
 playIntro.addEventListener("click", async () => {
@@ -660,13 +642,11 @@ playIntro.addEventListener("click", async () => {
     }
 });
 
-/* UPDATE POSTER DAN LIRIK */
 audio.addEventListener("timeupdate", () => {
     updatePoster(audio.currentTime);
     updateLyrics(audio.currentTime);
 });
 
-/* SALJU */
 const canvas = document.getElementById("snow");
 const ctx = canvas.getContext("2d");
 
@@ -747,7 +727,6 @@ window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 drawSnow();
 
-/* LAGU SELESAI: KEMBALI KE TOMBOL PLAY */
 audio.addEventListener("ended", () => {
     clearInterval(fadeInterval);
     fadeInterval = null;
@@ -788,7 +767,6 @@ const starDoodle = `
              L80 36 L77 27 L68 24 L77 21 Z"/>
 </svg>`;
 
-/* OBJEK GOOFY */
 const goofyObjects = [
     { type: "emoji", content: "✈️" },
     { type: "emoji", content: "🦆🛹" },
